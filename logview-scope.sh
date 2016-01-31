@@ -3,7 +3,8 @@
 # .i3/config
 # for_window[title="^Gnuplot"] floating enable
 
-# 
+# http://users.softlab.ntua.gr/~ttsiod/gnuplotStreaming.html
+# http://users.softlab.ntua.gr/~ttsiod/driveGnuPlots.pl
 
 width=300
 
@@ -76,4 +77,3 @@ Rbat Rwire Z AA AB \
 
 # leave empty line bove this one
 
-#320x300+1600+1200 \
