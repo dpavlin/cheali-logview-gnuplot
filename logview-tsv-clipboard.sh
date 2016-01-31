@@ -1,0 +1,1 @@
+grep '$1' cheali.log | sed 's/;/\t/g' | xclip -selection clipboard -i
