@@ -4,12 +4,12 @@
 # for_window[title="^Gnuplot"] floating enable
 
 # http://users.softlab.ntua.gr/~ttsiod/gnuplotStreaming.html
-# http://users.softlab.ntua.gr/~ttsiod/driveGnuPlots.pl
+test -x driveGnuPlots.pl || wget http://users.softlab.ntua.gr/~ttsiod/driveGnuPlots.pl && chmod 755 driveGnuPlots.pl
 
-width=300
+width=120
 
-#tail -f cheali.log \
-cat cheali.log \
+#tail -f `ls -t log/*.log | head -1` \
+cat `ls -t log/*.log | head -1` \
 | grep '$1' | cut -d\; -f \
 4,5,6,\
 10,11,\
@@ -74,6 +74,7 @@ Rbat Rwire Z AA AB \
 400x175+2700+850 \
 400x175+2700+1050 \
 400x175+2700+1250 \
+2>/dev/null
 
 # leave empty line bove this one
 
