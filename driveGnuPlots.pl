@@ -63,6 +63,37 @@ sub main {
     # hardcode it...
     $terminal  = "x11";
 
+	my $x_start = 10;
+	my $y_start = 30;
+	my $x_space = 5; # gnuplot needs some space
+	my $y_space = 15;
+	my $w = 320;
+	my $h = 200;
+	my $x = $x_start;
+	my $y = $y_start;
+
+	my ($x_size, $y_size) = ( 1,1 );
+	my $vertical = 1;
+	foreach my $title (@titles) {
+		if ( $title =~ m/,$/ ) {
+			$y_size = $vertical if $vertical > $y_size;
+			$vertical = 1;
+			$x_size++;
+		} else {
+			$vertical++;
+		}
+	}
+	print "# grid $x_size x $y_size\n";
+
+	my $info = `xwininfo -root`;
+	if ( $info =~ m/-geometry (\d+)x(\d+)/ ) {
+		my ( $x_screen, $y_screen ) = ( $1, $2 );
+		$w = int( ( $x_screen - ( 2 * $x_start ) - ( ($x_size-1) * $x_space ) ) / $x_size );
+		$h = int( ( $y_screen - ( 2 * $y_start ) - ( ($y_size-1) * $y_space ) ) / $y_size );
+		print "# graph size $w x $h\n";
+	}
+
+
     my @gnuplots;
     my @buffers;
     my @xcounters;
@@ -72,16 +103,26 @@ sub main {
 	shift @ARGV; # title
 	shift @ARGV; # geometry
 	local *PIPE;
-	my $geometry = "";
-	if (-1 != $#geometries) {
-	    $geometry = " -geometry ".$geometries[$i];
+
+	my $geometry = "${w}x${h}+${x}+${y}";
+	$geometries[$i] = $geometry;
+	print "# $i $titles[$i] $geometry\n";
+	$geometry = " -geometry $geometry";
+
+	if ( $titles[$i] =~ s/,$// ) {
+		$x += $w + $x_space;
+		$y  = $y_start;
+	} else {
+		$y += $h + $y_space;
 	}
+
 	open PIPE, "|gnuplot $geometry " || die "Can't initialize gnuplot number ".($i+1)."\n";
 	select((select(PIPE), $| = 1)[0]);
 	push @gnuplots, *PIPE;
 	print PIPE "set xtics\n";
 	print PIPE "set ytics\n";
-	print PIPE "set style data linespoints\n";
+#	print PIPE "set style data linespoints\n";
+	print PIPE "set style data lines\n";
 	print PIPE "set grid\n";
 	if ($numberOfStreams == 1) {
 	    print PIPE "set terminal $terminal title '".$titles[0]."' noraise\n";
