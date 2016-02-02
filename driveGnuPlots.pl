@@ -83,6 +83,8 @@ sub main {
 			$vertical++;
 		}
 	}
+	$vertical--;
+	$y_size = $vertical if $vertical > $y_size;
 	print "# grid $x_size x $y_size\n";
 
 	my $info = `xwininfo -root`;
