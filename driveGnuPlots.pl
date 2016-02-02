@@ -95,6 +95,7 @@ sub main {
 		print "# graph size $w x $h\n";
 	}
 
+	#@sampleSizes = ( $w x $numberOfStreams );
 
     my @gnuplots;
     my @buffers;
