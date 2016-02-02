@@ -7,9 +7,14 @@
 test -x driveGnuPlots.pl || wget http://users.softlab.ntua.gr/~ttsiod/driveGnuPlots.pl && chmod 755 driveGnuPlots.pl
 
 width=120
+file=$1
+
+test -z "$file" && file=`ls -t log/*.log | head -1`
+
+echo "# using $width points from file $file"
 
 #tail -f `ls -t log/*.log | head -1` \
-cat `ls -t log/*.log | head -1` \
+cat $file \
 | grep '$1' | cut -d\; -f \
 4,5,6,\
 10,11,\
