@@ -6,6 +6,8 @@
 # http://users.softlab.ntua.gr/~ttsiod/gnuplotStreaming.html
 test -x driveGnuPlots.pl || wget http://users.softlab.ntua.gr/~ttsiod/driveGnuPlots.pl && chmod 755 driveGnuPlots.pl
 
+screen=1920x1080
+#screen=1280x720
 width=600
 file=$1
 
@@ -13,9 +15,13 @@ test -z "$file" && file=`ls -t log/*.log | head -1`
 
 echo "# using $width points from file $file"
 
-Xephyr -screen 1920x1080 :1 &
-sleep 1
+Xephyr -screen $screen :1 &
+xephir_pid=$!
 export DISPLAY=:1
+
+while ! xwininfo -root ; do
+	sleep 1
+done
 
 
 #tail -f `ls -t log/*.log | head -1` \
@@ -65,3 +71,4 @@ Rbat Rwire Z AA AB \
 
 # leave empty line above this one
 
+kill $xephir_pid
