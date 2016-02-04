@@ -13,6 +13,11 @@ test -z "$file" && file=`ls -t log/*.log | head -1`
 
 echo "# using $width points from file $file"
 
+Xephyr -screen 1920x1080 :1 &
+sleep 1
+export DISPLAY=:1
+
+
 #tail -f `ls -t log/*.log | head -1` \
 cat $file \
 | grep '$1' | cut -d\; -f \
@@ -58,4 +63,5 @@ r1 r2 r3 r4 r5 r6, \
 Rbat Rwire Z AA AB \
 2>/dev/null
 
-# leave empty line bove this one
+# leave empty line above this one
+

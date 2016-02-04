@@ -26,6 +26,9 @@ sub Arg {
     $ARGV[int($_[0])];
 }
 
+my $frames = "/tmp/frames";
+my $frame_nr = 1;
+
 sub main {
     my $argIdx = 0;
     my $numberOfStreams = Arg($argIdx++);
@@ -63,9 +66,9 @@ sub main {
     # hardcode it...
     $terminal  = "x11";
 
-	my $x_start = 10;
-	my $y_start = 30;
-	my $x_space = 5; # gnuplot needs some space
+	my $x_start = 1; # 10
+	my $y_start = 1; # 30
+	my $x_space = 3; # gnuplot needs some space
 	my $y_space = 15;
 	my $w = 320;
 	my $h = 200;
@@ -143,6 +146,12 @@ sub main {
 	chomp;
 	my @parts = split /:/;
 	$streamIdx = $parts[0];
+
+	if ( $streamIdx == 0 ) { #&& -e $frames ) {
+		system "xwd -root > " . sprintf("%s/%06d.xwd", $frames, $frame_nr);
+		$frame_nr++;
+	}
+
 	my $buf = $buffers[$streamIdx];
 	my $pip = $gnuplots[$streamIdx];
 	my $xcounter = $xcounters[$streamIdx];
